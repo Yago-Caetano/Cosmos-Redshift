@@ -1,6 +1,7 @@
 
 from enums.action_enum import ActionEnum
 from enums.target_enum import TargetEnum
+from enums.state_enum import StateEnum
 
 
 class ActionModel():
@@ -10,8 +11,7 @@ class ActionModel():
         self.__retryLimit = None
         self.__timeout = None
         self.__action = None
-        self.__success_cb = None
-        self.__fail_cb = None
+        self.__state = StateEnum.NOT_INITIALIZED
 
     def set_timeout(self,timeout:int):
         self.__timeout = timeout
@@ -36,15 +36,9 @@ class ActionModel():
 
     def get_action(self) -> ActionEnum:
         return self.__action
-
-    def set_success_cb(self,cb):
-        self.__success_cb = cb
     
-    def get_success_cb(self):
-        return self.__success_cb
+    def set_state(self,state:StateEnum):
+        self.__state = state
 
-    def set_fail_cb(self,cb):
-        self.__fail_cb = cb
-
-    def get_fail_cb(self):
-        return self.__fail_cb 
+    def get_state(self):
+        return self.__state

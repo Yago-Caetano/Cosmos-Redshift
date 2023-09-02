@@ -1,3 +1,6 @@
 
+from handlers.job_handler import job_handler_init
+
+
 if __name__ == '__main__':
-    print("Running")
+    job_handler_init()

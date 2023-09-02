@@ -1,7 +1,6 @@
-import enum
+from enum import Enum
 
-
-class TargetEnum(enum):
+class TargetEnum(Enum):
     TARGET_STH_COMET = "STH_COMET"
     TARGET_LINEAR_REG_MODULE = "LINEAR_REG_MODULE"
     TARGET_CORRELATION_MODULE = "CORRELATION_MODULE"

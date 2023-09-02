@@ -1,7 +1,6 @@
-import enum
+from enum import Enum, IntEnum
 
-
-class StateEnum(enum):
+class StateEnum(IntEnum):
     NOT_INITIALIZED = 0
     PENDING = 1
     EXECUTING = 2
