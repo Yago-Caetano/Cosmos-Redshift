@@ -9,11 +9,18 @@ class JobModel():
         self.__id = id
         self.__actions = []
         self.__state = StateEnum.NOT_INITIALIZED
-        self.__in_args = None
+        self.__args = {}
         self.__out_args = None
 
     def add_action(self,action:ActionModel):
         self.__actions.append(action)
+
+    def get_next_pending_action(self):
+        for action in self.__actions:
+            if(action.get_state() != StateEnum.DONE):
+                return action
+        
+        return None
 
     def get_actions(self):
         return self.__actions
@@ -24,14 +31,9 @@ class JobModel():
     def get_id(self):
         return self.__id
     
-    def get_in_args(self):
-        return self.__in_args
+    def get_args(self):
+        return self.__args
     
-    def set_in_args(self,data):
-        self.__in_args = copy.deepcopy(data)
+    def add_args(self,key,data):
+        self.__args[key] = copy.deepcopy(data)
     
-    def set_out_args(self,data):
-        self.__out_args = copy.deepcopy(data)
-
-    def get_out_args(self):
-        return self.__out_args

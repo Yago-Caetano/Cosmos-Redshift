@@ -3,7 +3,7 @@ import json
 from utils.job_utils import JobUtils
 
 def test_json_to_job_model():
-    json_raw = '{"JOB_ID": "123", "JOB_IN_ARGS": "input_data", "JOB_OUT_ARGS": "output_data", "ACTIONS": [{"TARGET": "STH_COMET", "IN_ARGS": "", "STATE": 0, "ACTION": "GET_STH_COMET_DATA"}, {"TARGET": "CORRELATION_MODULE", "IN_ARGS": "", "STATE": 1, "ACTION": "EXECUTE_CORRELATION_ANALYSIS"}]}'
+    json_raw = '{"JOB_ID": "123", "ARGS": "input_data", "ACTIONS": [{"TARGET": "STH_COMET", "IN_ARGS": "", "STATE": 0, "ACTION": "GET_STH_COMET_DATA"}, {"TARGET": "CORRELATION_MODULE", "IN_ARGS": "", "STATE": 1, "ACTION": "EXECUTE_CORRELATION_ANALYSIS"}]}'
 
     job = JobUtils().convert_json_to_job(json_raw)
     json_dict = json.loads(json_raw)

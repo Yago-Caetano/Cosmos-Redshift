@@ -5,3 +5,4 @@ class StateEnum(IntEnum):
     PENDING = 1
     EXECUTING = 2
     WAITING_RESPONSE=3
+    DONE = 4

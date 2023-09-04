@@ -3,6 +3,8 @@ from queue import Queue
 import threading
 import pika
 
+from utils.job_utils import JobUtils
+
 class BaseModule(ABC):
 
     def __init__(self):
@@ -19,8 +21,12 @@ class BaseModule(ABC):
         
     # Função para processar mensagens recebidas
     def __callback(self,ch, method, properties, body):
-        print(f"{__name__} Recebido: {body.decode('utf-8')}")
+        #print(f"{__name__} Recebido: {body.decode('utf-8')}")
+        job =JobUtils().convert_json_to_job(body.decode('utf-8'))
 
+        if(job != None):
+            #append into local queue
+            self.__jobs.put(job)
 
     def __consume_rabbit_mq(self):
         # Inicie o loop para escutar a fila indefinidamente
