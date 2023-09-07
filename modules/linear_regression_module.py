@@ -17,19 +17,24 @@ class LinearRegressionModule(BaseModule):
     def on_execute(self):
         super().on_execute()
         while True:
-            #consome local queue data
-            local_job = self.__jobs.get()
+            try:
+                #consome local queue data
+                local_job = self.__jobs.get()
 
-            if(local_job != None):
-                if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_LINEAR_REGRESSION):
-                    print(local_job)
-                    #convert incoming data to dataframe
-                    self.perform_linear_regression(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
-
+                if(local_job != None):
+                    if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_LINEAR_REGRESSION):
+                        print(local_job)
+                        #convert incoming data to dataframe
+                        self.perform_linear_regression(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
+            except:
+                pass
 
 
     def perform_linear_regression(self,dataset, columns_to_analyze, target_column):
-        df = dataset[columns_to_analyze + [target_column]]
+
+        df = pd.DataFrame(dataset)
+
+        df = df[columns_to_analyze + [target_column]]
 
         X = df[columns_to_analyze].values
         y = df[target_column].values
@@ -49,6 +54,6 @@ class LinearRegressionModule(BaseModule):
 
         plt.ylabel(target_column)
         plt.title("Gráfico de Predição")
-        plt.show()
+        #plt.show()
 
-        return parameters
+        return {"params": parameters, "figure": plt}

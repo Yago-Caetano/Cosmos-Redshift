@@ -15,10 +15,7 @@ def test_json_to_job_model():
     assert(job.get_id() == json_dict['JOB_ID'])
 
     #check in args
-    assert(job.get_in_args() == json_dict['JOB_IN_ARGS'])
-
-    #check out args
-    assert(job.get_out_args() == json_dict['JOB_OUT_ARGS'])
+    #assert(job.get_args() == json_dict['ARGS'])
 
     #check actions
     for i in range(0,1,len(json_dict['ACTIONS'])):

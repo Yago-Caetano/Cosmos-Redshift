@@ -15,15 +15,17 @@ class CorrelationModule(BaseModule):
     def on_execute(self):
         super().on_execute()
         while True:
-            #consome local queue data
-            local_job = self.__jobs.get()
+            try:
+                #consome local queue data
+                local_job = self.__jobs.get()
 
-            if(local_job != None):
-                if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_CORRELATION_ANALYSIS):
-                    print(local_job)
-                    #convert incoming data to dataframe
-                    self.analyze_and_visualize_correlations(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
-                    
+                if(local_job != None):
+                    if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_CORRELATION_ANALYSIS):
+                        print(local_job)
+                        #convert incoming data to dataframe
+                        self.analyze_and_visualize_correlations(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
+            except:
+                pass        
 
 
     def analyze_and_visualize_correlations(self,dataframe, columns_to_analyze):
@@ -40,5 +42,5 @@ class CorrelationModule(BaseModule):
         sns.heatmap(correlations, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
         plt.title("Mapa de Calor das Correlações entre Colunas")
         #plt.show()
-
-        plt.savefig('output.eps', format='eps', bbox_inches='tight')
+        return plt
+        #plt.savefig('output.eps', format='eps', bbox_inches='tight')

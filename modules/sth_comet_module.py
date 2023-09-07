@@ -11,5 +11,8 @@ class SthCometModule(BaseModule):
     def on_execute(self):
         super().on_execute()
         while True:
-            time.sleep(1)
-            print("Running")
+            try:
+                time.sleep(1)
+                #print("Running")
+            except:
+                pass
