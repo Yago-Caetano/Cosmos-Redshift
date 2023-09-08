@@ -16,6 +16,9 @@ class BaseModule(ABC):
         self.__thread = None
         self.__hostname = 'localhost'
 
+        super().__init__()
+
+
     def set_rabbit_mq_queue(self,queue):
         self._external_queue = queue
         
@@ -31,6 +34,9 @@ class BaseModule(ABC):
     def __consume_rabbit_mq(self):
         # Inicie o loop para escutar a fila indefinidamente
         self.__queue_channel.start_consuming()
+
+    def get_job_from_inner_queue(self):
+        return self.__jobs.get()
 
     @abstractmethod
     def on_start(self):

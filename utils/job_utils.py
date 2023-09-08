@@ -33,7 +33,10 @@ class JobUtils():
             actions = data.get(JobFieldsEnum.ACTIONS.value, [])
 
             ret_job = JobModel(job_id)
-            ret_job.add_args("args",job_args)
+
+            if(job_args != None):
+                for key,value in job_args.items():
+                    ret_job.add_args(key,value)
             
             for action in actions:
                 #convert each node in ActionModel
