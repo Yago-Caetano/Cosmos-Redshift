@@ -3,6 +3,10 @@ import time
 
 import pika
 from enums.queues_enum import QueuesEnum
+from enums.argsKeysEnum import ArgsKeysEnums
+from enums.target_enum import TargetEnum
+from models.action_model import ActionModel
+from models.job_model import JobModel
 from utils.job_utils import JobUtils
 from modules.sth_comet_module import SthCometModule
 from modules.linear_regression_module import LinearRegressionModule
@@ -30,12 +34,30 @@ def post_msg():
     fila = QueuesEnum.STH_COMET_QUEUE.value # Substitua pelo nome da sua fila
 
     # Mensagem que você deseja enviar
-    mensagem = '{"JOB_ID": "123", "ARGS": { "entity": "urn:ngsi-ld:entity:986463ec-3f51-11ee-be56-0242ac120002", "type": "eggProduction", "attribute": "cracked_eggs", "fiware_service": "smart", "fiware_service_path": "/", "sth_aggr": "lastN=10"  }, "ACTIONS": [{"TARGET": "STH_COMET", "IN_ARGS": "", "STATE": 0, "ACTION": "GET_STH_COMET_DATA"}]}'
+    #mensagem = '{"JOB_ID": "123", "ARGS": { "entity": "urn:ngsi-ld:entity:986463ec-3f51-11ee-be56-0242ac120002", "type": "eggProduction", "attribute": "cracked_eggs", "fiware_service": "smart", "fiware_service_path": "/", "sth_aggr": "lastN=10"  }, "ACTIONS": [{"TARGET": "STH_COMET", "IN_ARGS": "", "STATE": 0, "ACTION": "GET_STH_COMET_DATA"}]}'
 
-    # Publica a mensagem na fila
-    canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+    collect_job = JobModel("123")
+    collect_job.add_args(ArgsKeysEnums.FIWARE_ENTITY.value,"urn:ngsi-ld:entity:986463ec-3f51-11ee-be56-0242ac120002")
+    collect_job.add_args(ArgsKeysEnums.FIWARE_ENTITY_TYPE.value,"eggProduction")
+    collect_job.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,["cracked_eggs","temperature"])
+    collect_job.add_args(ArgsKeysEnums.FIWARE_SERVICE.value,"smart")
+    collect_job.add_args(ArgsKeysEnums.FIWARE_SERVICE_PATH.value,"/")
+    collect_job.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
 
-    print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+    action = ActionModel()
+    action.set_target(TargetEnum.TARGET_STH_COMET)
+    action.set_action(ActionEnum.GET_STH_COMET_DATA)
+
+    collect_job.add_action(action)
+
+    mensagem = JobUtils().convert_job_to_json(collect_job)
+
+    if(mensagem != None):
+        print(mensagem)
+        # Publica a mensagem na fila
+        canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+        print(f"Mensagem enviada para a fila {fila}: {mensagem}")
 
     # Fecha a conexão
     conexao.close()

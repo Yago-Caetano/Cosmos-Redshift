@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from queue import Queue
 import threading
 import pika
+from enums.state_enum import StateEnum
+from enums.queues_enum import QueuesEnum
 
 from utils.job_utils import JobUtils
 
@@ -34,6 +36,36 @@ class BaseModule(ABC):
     def __consume_rabbit_mq(self):
         # Inicie o loop para escutar a fila indefinidamente
         self.__queue_channel.start_consuming()
+
+    def finalize_job_as_succed(self,job):
+        job.get_next_pending_action().set_state(StateEnum.DONE)
+
+        #dispatch job to main queue
+        self.__post_job_to_main_queue(job)
+
+    def __post_job_to_main_queue(self,job):
+
+        HOST = 'localhost'
+        
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(HOST))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
+
+        mensagem = JobUtils().convert_job_to_json(job)
+        print(mensagem)
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
+
 
     def get_job_from_inner_queue(self):
         return self.__jobs.get()
