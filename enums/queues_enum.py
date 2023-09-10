@@ -5,3 +5,4 @@ class QueuesEnum(Enum):
     CORRELATION_QUEUE = "correlation_queue"
     LINEAR_REGRESSION_QUEUE = "linear_reg_queue"
     STH_COMET_QUEUE = "sth_comet_queue"
+    API_GATEWAY_RESPONSE_QUEUE = "api_gateway_resp_queue"
