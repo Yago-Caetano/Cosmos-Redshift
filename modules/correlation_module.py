@@ -1,4 +1,6 @@
+import base64
 import time
+import matplotlib
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -17,18 +19,25 @@ class CorrelationModule(BaseModule):
         while True:
             try:
                 #consome local queue data
-                local_job = self.__jobs.get()
+                local_job = self.get_job_from_inner_queue()
 
                 if(local_job != None):
                     if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_CORRELATION_ANALYSIS):
-                        print(local_job)
+                        print(f'CORRELATION_MODULE: {local_job}')
                         #convert incoming data to dataframe
-                        self.analyze_and_visualize_correlations(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
+                        img = self.analyze_and_visualize_correlations(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.CORRELATION_TARGET_COLLUMNS.value])
+
+                        local_job.add_args(ArgsKeysEnums.RESULT_CORRELATION.value,img)
+
+                        #set this action as Complete
+                        self.finalize_job_as_succed(local_job)   
             except:
                 pass        
 
 
     def analyze_and_visualize_correlations(self,dataframe, columns_to_analyze):
+        
+        matplotlib.use('Agg')
 
         df = pd.DataFrame(dataframe, columns=columns_to_analyze)
 
@@ -41,6 +50,16 @@ class CorrelationModule(BaseModule):
         plt.figure(figsize=(10, 8))
         sns.heatmap(correlations, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
         plt.title("Mapa de Calor das Correlações entre Colunas")
+        plt.savefig('grafico.png', format='png')
+
         #plt.show()
-        return plt
+        with open('grafico.png', 'rb') as png_file:
+            png_contents = png_file.read()
+
+        # Codificar em base64
+        base64_image = base64.b64encode(png_contents).decode('utf-8')
+
+        plt.clf()
+
+        return base64_image
         #plt.savefig('output.eps', format='eps', bbox_inches='tight')

@@ -1,4 +1,6 @@
+import base64
 import time
+import matplotlib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,18 +21,27 @@ class LinearRegressionModule(BaseModule):
         while True:
             try:
                 #consome local queue data
-                local_job = self.__jobs.get()
+                local_job = self.get_job_from_inner_queue()
 
                 if(local_job != None):
                     if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_LINEAR_REGRESSION):
                         print(local_job)
                         #convert incoming data to dataframe
-                        self.perform_linear_regression(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.COLLUMNS.value])
-            except:
+                        img = self.perform_linear_regression(local_job.get_args()[ArgsKeysEnums.DATASET.value],local_job.get_args()[ArgsKeysEnums.LINEAR_REG_ANALYSE_COLLUMNS.value],local_job.get_args()[ArgsKeysEnums.LINEAR_REG_TARGET_COLLUMNS.value])
+
+                        print(img)
+
+                        local_job.add_args(ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value,img)
+
+                        #set this action as Complete
+                        self.finalize_job_as_succed(local_job)   
+            except Exception as e:
+                print(e)
                 pass
 
 
     def perform_linear_regression(self,dataset, columns_to_analyze, target_column):
+        matplotlib.use('Agg')
 
         df = pd.DataFrame(dataset)
 
@@ -42,9 +53,10 @@ class LinearRegressionModule(BaseModule):
         model = LinearRegression()
         model.fit(X, y)
 
+
         parameters = {
-            'intercept': model.intercept_,
-            'coefficients': dict(zip(columns_to_analyze, model.coef_))
+            'intercept':  model.intercept_.tolist(),
+            'coefficients': model.coef_.tolist()
         }
 
         predictions = model.predict(X)
@@ -56,4 +68,15 @@ class LinearRegressionModule(BaseModule):
         plt.title("Gráfico de Predição")
         #plt.show()
 
-        return {"params": parameters, "figure": plt}
+        plt.savefig('grafico.png', format='png')
+
+        #plt.show()
+        with open('grafico.png', 'rb') as png_file:
+            png_contents = png_file.read()
+
+        # Codificar em base64
+        base64_image = base64.b64encode(png_contents).decode('utf-8')
+
+        plt.clf()
+
+        return {"params": parameters, "figure": base64_image}

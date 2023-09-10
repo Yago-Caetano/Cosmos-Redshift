@@ -43,12 +43,29 @@ def post_msg():
     collect_job.add_args(ArgsKeysEnums.FIWARE_SERVICE.value,"smart")
     collect_job.add_args(ArgsKeysEnums.FIWARE_SERVICE_PATH.value,"/")
     collect_job.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+    collect_job.add_args(ArgsKeysEnums.CORRELATION_TARGET_COLLUMNS.value,["cracked_eggs","temperature"])
+    collect_job.add_args(ArgsKeysEnums.LINEAR_REG_ANALYSE_COLLUMNS.value,["cracked_eggs","temperature"])
+
+    collect_job.add_args(ArgsKeysEnums.LINEAR_REG_TARGET_COLLUMNS.value,"temperature")
+
+
 
     action = ActionModel()
     action.set_target(TargetEnum.TARGET_STH_COMET)
     action.set_action(ActionEnum.GET_STH_COMET_DATA)
 
+    action_corr = ActionModel()
+    action_corr.set_target(TargetEnum.TARGET_CORRELATION_MODULE)
+    action_corr.set_action(ActionEnum.EXECUTE_CORRELATION_ANALYSIS)
+
+
+    action_reg_linear = ActionModel()
+    action_reg_linear.set_target(TargetEnum.TARGET_LINEAR_REG_MODULE)
+    action_reg_linear.set_action(ActionEnum.EXECUTE_LINEAR_REGRESSION)
+    
     collect_job.add_action(action)
+    collect_job.add_action(action_corr)
+    collect_job.add_action(action_reg_linear)
 
     mensagem = JobUtils().convert_job_to_json(collect_job)
 
@@ -81,6 +98,79 @@ def read_cb(ch, method, properties, body):
 
     if(job == None):
         print("Failed to parse JOB")
+
+    pending_action = job.get_next_pending_action()
+
+    if(pending_action == None):
+        print(f'O trabalho {job.get_id()} foi ENCERRADO!!')
+
+        print("Raw data")
+        print(body)
+        return
+    
+    #check next available job and dispatch it
+    if(pending_action.get_action() == ActionEnum.EXECUTE_CORRELATION_ANALYSIS):
+
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(HOST))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.CORRELATION_QUEUE.value # Substitua pelo nome da sua fila
+
+        mensagem = JobUtils().convert_job_to_json(job)
+
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
+
+    elif(pending_action.get_action() == ActionEnum.EXECUTE_LINEAR_REGRESSION):
+        
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(HOST))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.LINEAR_REGRESSION_QUEUE.value # Substitua pelo nome da sua fila
+
+        mensagem = JobUtils().convert_job_to_json(job)
+
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
+
+    elif(pending_action.get_action() == ActionEnum.GET_STH_COMET_DATA):
+
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(HOST))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.STH_COMET_QUEUE.value # Substitua pelo nome da sua fila
+
+        mensagem = JobUtils().convert_job_to_json(job)
+
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
 
 
 def connect_to_main_queue():
