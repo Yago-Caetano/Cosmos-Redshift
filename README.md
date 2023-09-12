@@ -2,6 +2,14 @@
 
 AI component to FIWARE environment
 
+## Running on docker-compose
+
+
+```
+    docker-compose up
+
+```
+
 
 
 ## Project Architecture
