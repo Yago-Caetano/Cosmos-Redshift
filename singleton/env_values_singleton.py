@@ -10,9 +10,9 @@ from singleton.singleton_meta import SingletonMeta
 class EnvValuesSingleton(metaclass=SingletonMeta):
 
     def __init__(self) -> None:
-        load_dotenv()
-        self.__internal_rb_queue_host = os.getenv("INTERNAL_RABBIT_MQ_HOST")
-        self.__internal_rb_queue_port = os.getenv("INTERNAL_RABBIT_MQ_PORT")
+        #load_dotenv()
+        self.__internal_rb_queue_host = os.environ.get("INTERNAL_RABBIT_MQ_HOST")
+        self.__internal_rb_queue_port = os.environ.get("INTERNAL_RABBIT_MQ_PORT")
 
         self.__sth_host = os.getenv("STH_COMET_HOST")
         self.__sth_port = os.getenv("STH_COMET_PORT")
@@ -26,7 +26,7 @@ class EnvValuesSingleton(metaclass=SingletonMeta):
     def get_internal_queue_port(self):
         return self.__internal_rb_queue_port
   
-    def get_internal_queue_host(self):
+    def get_internal_sth_host(self):
         return self.__sth_host
     
     def get_internal_sth_port(self):

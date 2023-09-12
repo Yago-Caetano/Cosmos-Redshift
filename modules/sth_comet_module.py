@@ -5,6 +5,7 @@ from enums.action_enum import ActionEnum
 from enums.argsKeysEnum import ArgsKeysEnums
 import pandas as pd
 from enums.state_enum import StateEnum
+from singleton.env_values_singleton import EnvValuesSingleton
 
 from modules.base_module import BaseModule
 
@@ -42,10 +43,7 @@ class SthCometModule(BaseModule):
     def consume_sth(self, entity_id, type, attr, query_param, fiware_service, service_path):
         try:
             
-            HOST = "localhost"
-            STH_PORT = 8666
-
-            enspoint_str = f'http://{HOST}:{STH_PORT}/STH/v1/contextEntities/type/{type}/id/{entity_id}/attributes/{attr}'
+            enspoint_str = f'http://{EnvValuesSingleton().get_internal_sth_host()}:{EnvValuesSingleton().get_internal_sth_port()}/STH/v1/contextEntities/type/{type}/id/{entity_id}/attributes/{attr}'
 
             if(query_param != None):
                 enspoint_str += f'?{query_param}'

@@ -4,6 +4,7 @@ import threading
 import pika
 from enums.state_enum import StateEnum
 from enums.queues_enum import QueuesEnum
+from singleton.env_values_singleton import EnvValuesSingleton
 
 from utils.job_utils import JobUtils
 
@@ -16,7 +17,7 @@ class BaseModule(ABC):
         self.__queue_channel = None
         self.__connection = None
         self.__thread = None
-        self.__hostname = 'localhost'
+        self.__hostname = EnvValuesSingleton().get_internal_queue_host()
 
         super().__init__()
 
@@ -44,11 +45,9 @@ class BaseModule(ABC):
         self.__post_job_to_main_queue(job)
 
     def __post_job_to_main_queue(self,job):
-
-        HOST = 'localhost'
         
         # Configurações de conexão com o RabbitMQ
-        conexao = pika.BlockingConnection(pika.ConnectionParameters(HOST))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
         canal = conexao.channel()
 
         # Declaração da fila onde você deseja publicar mensagens
@@ -82,8 +81,7 @@ class BaseModule(ABC):
     def on_execute(self):
         '''
             Read RabbitMQ queue
-        '''
-
+        '''        
         # Configurações de conexão com o RabbitMQ
         self.__connection = pika.BlockingConnection(pika.ConnectionParameters(self.__hostname))
 
