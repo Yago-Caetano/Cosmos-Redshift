@@ -86,7 +86,7 @@ class BaseModule(ABC):
         self.__connection = pika.BlockingConnection(pika.ConnectionParameters(self.__hostname))
 
         self.__queue_channel = self.__connection.channel()
-        self.__queue_channel.queue_declare(queue=self._external_queue)
+        self.__queue_channel.queue_declare(queue=self._external_queue,exclusive=True)
 
         # Create callback
         self.__queue_channel.basic_consume(queue=self._external_queue, on_message_callback=self.__callback, auto_ack=True)

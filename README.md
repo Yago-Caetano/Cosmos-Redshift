@@ -31,4 +31,3 @@ AI component to FIWARE environment
     ORION_CONTEXT_BROKER_PORT = 1026
 
 ```
-
