@@ -107,7 +107,7 @@ def read_cb(ch, method, properties, body):
         # Fecha a conexão
         conexao.close()
 
-    elif(pending_action.get_action() == ActionEnum.SEND_RESPONSE_TO_API_GATEWAY):
+    elif((pending_action.get_action() == ActionEnum.SEND_RESPONSE_TO_API_GATEWAY) or (pending_action.get_action() == ActionEnum.SEND_ASYNC_RESPONSE_TO_API_GATEWAY)):
         # Configurações de conexão com o RabbitMQ
         conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
         canal = conexao.channel()

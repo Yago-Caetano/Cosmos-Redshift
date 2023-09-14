@@ -19,7 +19,7 @@ class ApiRequestUtils():
                 return status
         return None
     
-    def convert_request_to_job(self,request_dict) -> JobModel:
+    def convert_request_to_job(self,request_dict,async_job:bool) -> JobModel:
         try:
             retJob = JobModel(str(int(time.time())))
 
@@ -84,15 +84,24 @@ class ApiRequestUtils():
             else:
                 return None
         
+            if(async_job == False):
+                #include action to send this job back to api gateway
+                api_resp_action = ActionModel()
+                api_resp_action.set_target(TargetEnum.TARGET_API_GATEWAY)
+                api_resp_action.set_action(ActionEnum.SEND_RESPONSE_TO_API_GATEWAY)
 
-            #include action to send this job back to api gateway
-            api_resp_action = ActionModel()
-            api_resp_action.set_target(TargetEnum.TARGET_API_GATEWAY)
-            api_resp_action.set_action(ActionEnum.SEND_RESPONSE_TO_API_GATEWAY)
+                retJob.add_action(api_resp_action)
+            else:
+                #include action to send this job back to api gateway
+                api_resp_action = ActionModel()
+                api_resp_action.set_target(TargetEnum.TARGET_API_GATEWAY)
+                api_resp_action.set_action(ActionEnum.SEND_ASYNC_RESPONSE_TO_API_GATEWAY)
 
-            retJob.add_action(api_resp_action)
+                retJob.add_action(api_resp_action)
+
             
             return retJob
 
         except Exception as e:
+            print("Exception: {e}")
             return None

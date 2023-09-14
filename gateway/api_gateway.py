@@ -6,12 +6,15 @@ import requests
 from flask import Flask, request
 import threading
 from enums.queues_enum import QueuesEnum
+from enums.argsKeysEnum import ArgsKeysEnums
+from enums.action_enum import ActionEnum
 from singleton.env_values_singleton import EnvValuesSingleton
 from utils.job_utils import JobUtils
 from models.job_model import JobModel
 from utils.api_utils import ApiRequestUtils
 
 from utils import api_utils
+import uuid
 
 class ApiGateway():
 
@@ -19,7 +22,7 @@ class ApiGateway():
         self.__app = Flask(__name__)
         self.__app.add_url_rule('/api/availableEntities', 'collect_available_entities', self.collect_available_entities, methods=['GET'])
         self.__app.add_url_rule('/api/sync/requestAnalysis', 'request_sync_analysis', self.request_sync_analysis, methods=['POST'])
-        self.__app.add_url_rule('/api/requestAnalysis', 'request_analysis', self.request_async_analysis, methods=['POST'])
+        self.__app.add_url_rule('/api/requestAnalysis', 'request_async_analysis', self.request_async_analysis, methods=['POST'])
         self.__pending_job_id = None
         self.__wainting_for_job_conclusion = False
 
@@ -35,9 +38,15 @@ class ApiGateway():
         if(job == None):
             return
         
-        if((self.__wainting_for_job_conclusion == True) and (self.__pending_job_id == job.get_id())):
-            self.__resp_job = job
-            self.__wainting_for_job_conclusion = False
+        pending_action = job.get_next_pending_action()
+        
+        if(pending_action.get_action() == ActionEnum.SEND_RESPONSE_TO_API_GATEWAY):
+            if((self.__wainting_for_job_conclusion == True) and (self.__pending_job_id == job.get_id())):
+                self.__resp_job = job
+                self.__wainting_for_job_conclusion = False
+        elif(pending_action.get_action() == ActionEnum.SEND_ASYNC_RESPONSE_TO_API_GATEWAY):
+            #post msg to external queue
+            self.__post_msg_ext(job.get_args()[ArgsKeysEnums.EXTERNAL_QUEUE.value],job)
 
     def __consome_api_resp_queue(self):
         
@@ -65,8 +74,7 @@ class ApiGateway():
         self.resp_queue_handler.daemon = True
         self.resp_queue_handler.start()
 
-
-    def __post_msg(self,job:JobModel):
+    def __post_msg_ext(self,queue_id,job:JobModel):
 
         global channel
         global connection
@@ -75,7 +83,7 @@ class ApiGateway():
         conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
         canal = conexao.channel()
 
-        fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
+        fila = queue_id # Substitua pelo nome da sua fila
 
         mensagem = JobUtils().convert_job_to_json(job)
 
@@ -90,7 +98,47 @@ class ApiGateway():
         conexao.close()
 
     def request_sync_analysis(self):
-        job = ApiRequestUtils().convert_request_to_job(request.json)
+        job = ApiRequestUtils().convert_request_to_job(request.json,False)
+
+        if(job == None):
+            return "Requisição Inválida",400
+
+        self.__pending_job_id = job.get_id()
+        self.__wainting_for_job_conclusion = True
+
+        self.__post_msg(job)
+
+
+        while(self.__wainting_for_job_conclusion == True):
+            time.sleep(0.01)
+
+        return JobUtils().convert_job_to_json(self.__resp_job)
+
+    def __post_msg(self,job:JobModel):
+
+        global channel
+        global connection
+
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
+
+        mensagem = JobUtils().convert_job_to_json(job)
+        print(f'POST MSG: {mensagem}')
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
+
+    def request_sync_analysis(self):
+        job = ApiRequestUtils().convert_request_to_job(request.json,False)
 
         if(job == None):
             return "Requisição Inválida",400
@@ -107,16 +155,21 @@ class ApiGateway():
         return JobUtils().convert_job_to_json(self.__resp_job)
     
     def request_async_analysis(self):
-        job = ApiRequestUtils().convert_request_to_job(request.json)
+        job = ApiRequestUtils().convert_request_to_job(request.json,True)
 
         if(job == None):
             return "Requisição Inválida",400
-        
+        print(f'ASYNC REQUEST: {job}')
+
+        #create temporary queue
+        temp_uuid = str(uuid.uuid4())
+
+        job.add_args(ArgsKeysEnums.EXTERNAL_QUEUE.value,temp_uuid)
         self.__post_msg(job)
 
 
 
-        return "Análise Assincrona"
+        return temp_uuid
 
 
 

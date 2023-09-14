@@ -15,3 +15,4 @@ class ArgsKeysEnums(Enum):
 
     RESULT_CORRELATION = "result_correlation"
     RESULT_LINEAR_REGRESSION = "result_linear_reg"
+    EXTERNAL_QUEUE = "external_queue"
