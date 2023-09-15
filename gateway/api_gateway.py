@@ -84,6 +84,7 @@ class ApiGateway():
         canal = conexao.channel()
 
         fila = queue_id # Substitua pelo nome da sua fila
+        canal.queue_declare(queue=fila)
 
         mensagem = JobUtils().convert_job_to_json(job)
 

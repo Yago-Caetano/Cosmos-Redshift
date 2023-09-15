@@ -2,11 +2,8 @@ version: '3'
 services:
 
   rabbitmq:
-    image: "rabbitmq:3.8"
-    hostname: rabbitmq
-    expose:
-      - "5672"
-      - "15672"
+    image: "rabbitmq:3-management"
+    #hostname: rabbitmq
     ports:
       - "5672:5672"  # Porta padrão para conexões RabbitMQ
       - "15672:15672"  # Porta da interface de gerenciamento do RabbitMQ (opcional)
