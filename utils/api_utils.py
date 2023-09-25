@@ -1,3 +1,4 @@
+import json
 import time
 from enums.api_request_fields_enum import ApiRequestFieldsEnum
 from enums.api_actions_enum import ApiActionsEnum
@@ -18,7 +19,18 @@ class ApiRequestUtils():
             if status.value == string:
                 return status
         return None
-    
+
+    def convert_to_sucess_msg(self,job:JobModel):
+        ret_dict = {"response":"SUCESS"}
+        
+        if(ArgsKeysEnums.RESULT_CORRELATION.value in job.get_args()):
+            ret_dict["img"] = job.get_args()[ArgsKeysEnums.RESULT_CORRELATION.value]
+
+        if(ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value in job.get_args()):
+            ret_dict["img"] = job.get_args()[ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value]
+
+        return json.dumps(ret_dict)
+
     def convert_request_to_job(self,request_dict,async_job:bool) -> JobModel:
         try:
             retJob = JobModel(str(int(time.time())))

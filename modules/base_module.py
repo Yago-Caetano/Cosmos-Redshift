@@ -54,13 +54,13 @@ class BaseModule(ABC):
         fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
 
         mensagem = JobUtils().convert_job_to_json(job)
-        print(mensagem)
+        #print(mensagem)
         if(mensagem != None):
-            print(mensagem)
+            #print(mensagem)
             # Publica a mensagem na fila
             canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
 
-            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+            #print(f"Mensagem enviada para a fila {fila}: {mensagem}")
 
         # Fecha a conexão
         conexao.close()

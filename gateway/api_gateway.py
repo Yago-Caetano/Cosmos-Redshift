@@ -28,6 +28,7 @@ class ApiGateway():
 
         self.__resp_job = None
 
+
     def read_cb(self,ch, method, properties, body):
 
         print(f"{__name__} Recebido: {body.decode('utf-8')}")
@@ -86,7 +87,8 @@ class ApiGateway():
         fila = queue_id # Substitua pelo nome da sua fila
         canal.queue_declare(queue=fila)
 
-        mensagem = JobUtils().convert_job_to_json(job)
+        mensagem = ApiRequestUtils().convert_to_sucess_msg(job)
+        #JobUtils().convert_job_to_json(job)
 
         if(mensagem != None):
             print(mensagem)
@@ -97,7 +99,7 @@ class ApiGateway():
 
         # Fecha a conexão
         conexao.close()
-
+    '''
     def request_sync_analysis(self):
         job = ApiRequestUtils().convert_request_to_job(request.json,False)
 
@@ -114,6 +116,7 @@ class ApiGateway():
             time.sleep(0.01)
 
         return JobUtils().convert_job_to_json(self.__resp_job)
+    '''    
 
     def __post_msg(self,job:JobModel):
 
@@ -152,8 +155,8 @@ class ApiGateway():
 
         while(self.__wainting_for_job_conclusion == True):
             time.sleep(0.01)
-
-        return JobUtils().convert_job_to_json(self.__resp_job)
+        #return JobUtils().convert_job_to_json(self.__resp_job)
+        return ApiRequestUtils().convert_to_sucess_msg(self.__resp_job)
     
     def request_async_analysis(self):
         job = ApiRequestUtils().convert_request_to_job(request.json,True)
