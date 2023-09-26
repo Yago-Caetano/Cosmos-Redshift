@@ -20,6 +20,9 @@ class EnvValuesSingleton(metaclass=SingletonMeta):
         self.__orion_host = os.getenv("ORION_CONTEXT_BROKER_HOST")
         self.__orion_port = os.getenv("ORION_CONTEXT_BROKER_PORT")
 
+        self.__fiware_service = os.getenv("FIWARE_SERVICE")
+        self.__fiware_service_path = os.getenv("FIWARE_SERVICE_PATH")
+
     def get_internal_queue_host(self):
         return self.__internal_rb_queue_host
 
@@ -37,3 +40,9 @@ class EnvValuesSingleton(metaclass=SingletonMeta):
     
     def get_orion_port(self):
         return self.__orion_port
+    
+    def get_fiware_service(self):
+        return self.__fiware_service
+    
+    def get_fiware_service_path(self):
+        return self.__fiware_service_path

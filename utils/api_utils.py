@@ -5,6 +5,7 @@ from enums.api_actions_enum import ApiActionsEnum
 from enums.argsKeysEnum import ArgsKeysEnums
 from enums.action_enum import ActionEnum
 from enums.target_enum import TargetEnum
+from singleton.env_values_singleton import EnvValuesSingleton
 from models.action_model import ActionModel
 from models.job_model import JobModel
 
@@ -22,7 +23,7 @@ class ApiRequestUtils():
 
     def convert_to_sucess_msg(self,job:JobModel):
         ret_dict = {"response":"SUCESS"}
-        
+
         if(ArgsKeysEnums.RESULT_CORRELATION.value in job.get_args()):
             ret_dict["img"] = job.get_args()[ArgsKeysEnums.RESULT_CORRELATION.value]
 
@@ -35,8 +36,8 @@ class ApiRequestUtils():
         try:
             retJob = JobModel(str(int(time.time())))
 
-            retJob.add_args(ArgsKeysEnums.FIWARE_SERVICE.value,"smart")
-            retJob.add_args(ArgsKeysEnums.FIWARE_SERVICE_PATH.value,"/")
+            retJob.add_args(ArgsKeysEnums.FIWARE_SERVICE.value,EnvValuesSingleton().get_fiware_service())
+            retJob.add_args(ArgsKeysEnums.FIWARE_SERVICE_PATH.value,EnvValuesSingleton().get_fiware_service_path())
 
             #first, check if action is valid
             if(request_dict[ApiRequestFieldsEnum.ACTION.value] == None):

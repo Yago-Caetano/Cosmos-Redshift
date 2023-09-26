@@ -182,7 +182,7 @@ class ApiGateway():
 
             enspoint_str = f'http://{EnvValuesSingleton().get_orion_host()}:{EnvValuesSingleton().get_orion_port()}/v2/entities'
 
-            headers = {"fiware-service":"smart","fiware-servicepath":"/"}
+            headers = {"fiware-service": EnvValuesSingleton().get_fiware_service(),"fiware-servicepath": EnvValuesSingleton().get_fiware_service_path()}
 
             response = requests.get(enspoint_str, headers=headers)
 
