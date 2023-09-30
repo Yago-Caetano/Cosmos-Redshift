@@ -8,3 +8,4 @@ class ApiRequestFieldsEnum(Enum):
     ENTITY_TYPE = "entity_type"
     DATA_COLLUMNS = "fields"
     
+    
