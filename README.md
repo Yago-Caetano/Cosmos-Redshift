@@ -48,11 +48,35 @@ To peform a syncronized analisys, you need to execute a POST request to **/api/s
 
 To peform this kind of request, you need to execute a POST request to **/api/requestAnalysis** using the same payload as the previos [request](#requesting-sync-analisys)
 
-## Project Architecture
+## Architectures
+
+### Component Architetuctre
 
 ![project architecture](./docs/architecture.png)
 
+### Connection With Fiware Project
+
+![FIWARE Architecture](./docs//fiware-with-component.png)
+
 ## Tutorials
+
+### Setting fiware instance to be attached
+
+
+### 1 - Discover available entities and its attributes to perform analysis
+
+Before start requesting advanced analysis, it's recommed to read all entities and attributes available on attached fiware instance. You can check all entities by a simple GET request to **/api/availableEntities**. The image bellow demonstrate a example.
+
+**INSERT IMG**
+
+### 2 - Request a 2D graph
+
+
+### 3 - Peform a Correlation analysis
+
+
+### 4 - Peform a Linear Regression
+
 
 
 ### Environment variables
