@@ -5,6 +5,7 @@ import pika
 from enums.queues_enum import QueuesEnum
 from enums.argsKeysEnum import ArgsKeysEnums
 from enums.target_enum import TargetEnum
+from modules.two_dimmensional_graph_module import BidimensionalGraphModule
 from singleton.env_values_singleton import EnvValuesSingleton
 from models.action_model import ActionModel
 from models.job_model import JobModel
@@ -127,6 +128,27 @@ def read_cb(ch, method, properties, body):
         # Fecha a conexão
         conexao.close()
 
+    elif(pending_action.get_action() == pending_action.EXECUTE_BIDIMENSIONAL_ANALYSIS):
+        
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.TWO_DIMENSIONAL_GRAPH.value
+
+        mensagem = JobUtils().convert_job_to_json(job)
+
+        if(mensagem != None):
+            print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
+
 
 def connect_to_main_queue():
 
@@ -164,5 +186,9 @@ def job_handler_init():
     sth_comet_module = SthCometModule()
     sth_comet_module.set_rabbit_mq_queue(QueuesEnum.STH_COMET_QUEUE.value)
     sth_comet_module.start()
+
+    two_dimensional_graph_module = BidimensionalGraphModule()
+    two_dimensional_graph_module.set_rabbit_mq_queue(QueuesEnum.TWO_DIMENSIONAL_GRAPH.value)
+    two_dimensional_graph_module.start()
 
     connect_to_main_queue()

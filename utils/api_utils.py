@@ -93,7 +93,9 @@ class ApiRequestUtils():
 
             elif(action == ApiActionsEnum.LINEAR_REGRESSION_ANALYSIS):
                 pass
-
+            elif(action == ApiActionsEnum.TWO_DIMENSIONAL_GRAPHIC):
+                pass
+            
             else:
                 return None
         
