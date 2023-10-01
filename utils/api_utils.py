@@ -30,7 +30,10 @@ class ApiRequestUtils():
         if(ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value in job.get_args()):
             ret_dict["params"] = job.get_args()[ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value][ArgsKeysEnums.RESULT_LINEAR_REGRESSION_PARAMS.value]
             ret_dict["img"] = job.get_args()[ArgsKeysEnums.RESULT_LINEAR_REGRESSION.value][ArgsKeysEnums.RESULT_LINEAR_REGRESSION_FIGURE.value]
-            
+        
+        if(ArgsKeysEnums.RESULT_2D_GRAPH.value in job.get_args()):
+            ret_dict["img"] = job.get_args()[ArgsKeysEnums.RESULT_2D_GRAPH.value]
+
         return json.dumps(ret_dict)
 
     def convert_request_to_job(self,request_dict,async_job:bool) -> JobModel:
@@ -127,7 +130,37 @@ class ApiRequestUtils():
 
 
             elif(action == ApiActionsEnum.TWO_DIMENSIONAL_GRAPHIC):
-                pass
+                
+                #entity id
+                retJob.add_args(ArgsKeysEnums.FIWARE_ENTITY.value,request_dict[ApiRequestFieldsEnum.ENTITY.value])
+
+                #entity type
+                retJob.add_args(ArgsKeysEnums.FIWARE_ENTITY_TYPE.value,request_dict[ApiRequestFieldsEnum.ENTITY_TYPE.value])
+                #data to collect
+                aux_datas_to_retrieve = []
+                for data in request_dict[ApiRequestFieldsEnum.DATA_COLLUMNS.value]:
+                    aux_datas_to_retrieve.append(data)
+
+                retJob.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,aux_datas_to_retrieve)
+
+                #aggregration mode
+                retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+
+                #2d graphic collumns
+                retJob.add_args(ArgsKeysEnums.TWO_DIM_GRAPHIC_TARGET_COLLUMNS.value,aux_datas_to_retrieve)
+
+
+                #include actions
+                sth_action = ActionModel()
+                sth_action.set_target(TargetEnum.TARGET_STH_COMET)
+                sth_action.set_action(ActionEnum.GET_STH_COMET_DATA)
+
+                two_dim_action_reg = ActionModel()
+                two_dim_action_reg.set_target(TargetEnum.TARGET_2D_GRAPHIC_MODULE)
+                two_dim_action_reg.set_action(ActionEnum.EXECUTE_BIDIMENSIONAL_ANALYSIS)
+
+                retJob.add_action(sth_action)
+                retJob.add_action(two_dim_action_reg)
 
             else:
                 return None

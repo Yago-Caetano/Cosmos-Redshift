@@ -108,12 +108,23 @@ Before start requesting advanced analysis, it's recommed to read all entities an
 
 ![Get Entities](./docs/get-entities.png)
 
-As demonstrated above, the example fiware instance has a Entity named "eggPrediction" with attributes: "cracked_eggs", "dateReading" and "humidity".
+As demonstrated above, the example fiware instance has a Entity type called "eggPrediction" with id "urn:ngsi-ld:entity:986463ec-3f51-11ee-be56-0242ac120002" and attributes: "cracked_eggs", "dateReading" and "humidity".
 
 
 
 ### 3 - Request a 2D graph - Blocking
 
+To peform a 2D Graph request, you have to execute a POST request to **/api/sync/requestAnalysis** using action field as "2D_GRAPHIC" as shown bellow.
+
+Please, pay attention that we have use **entity** with the same value of **id** got from the [previous sample](#2---discover-available-entities-and-its-attributes-to-perform-analysis) and **entity_type** as the same of collected on [previous sample](#2---discover-available-entities-and-its-attributes-to-perform-analysis)
+
+![Request 2D Graphic](./docs/2d_req_analysis.png)
+
+In this case, you should receive a anwser like that
+
+![Response 2D Graphic](./docs/2d_resp_analysis.png)
+
+Attribute **img** is the result of analisys formatted as png image and enconded by BASE64 method. You can use the [Base64 Guru Site](https://base64.guru/converter/decode/image) to convert raw data in image. Keeping the last example, we got the image bellow.
 
 ### 4 - Peform a Correlation analysis - Blocking
 

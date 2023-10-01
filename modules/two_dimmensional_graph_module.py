@@ -52,7 +52,7 @@ class BidimensionalGraphModule(BaseModule):
         plt.xlabel(columns_to_analyze[0])
         plt.ylabel(columns_to_analyze[1])
 
-        plt.title("Mapa de Calor das Correlações entre Colunas")
+        plt.title(f'Gráfico {columns_to_analyze[0]} x {columns_to_analyze[1]}')
         plt.savefig('grafico.png', format='png')
 
         #plt.show()

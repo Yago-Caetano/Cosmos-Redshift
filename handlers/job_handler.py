@@ -128,7 +128,7 @@ def read_cb(ch, method, properties, body):
         # Fecha a conexão
         conexao.close()
 
-    elif(pending_action.get_action() == pending_action.EXECUTE_BIDIMENSIONAL_ANALYSIS):
+    elif((pending_action.get_action() == ActionEnum.EXECUTE_BIDIMENSIONAL_ANALYSIS) or (pending_action.get_action() == ActionEnum.EXECUTE_BIDIMENSIONAL_ANALYSIS)):
         
         # Configurações de conexão com o RabbitMQ
         conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
