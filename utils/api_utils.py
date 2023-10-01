@@ -92,10 +92,42 @@ class ApiRequestUtils():
                 retJob.add_action(action_corr)
 
             elif(action == ApiActionsEnum.LINEAR_REGRESSION_ANALYSIS):
-                pass
+                #entity id
+                retJob.add_args(ArgsKeysEnums.FIWARE_ENTITY.value,request_dict[ApiRequestFieldsEnum.ENTITY.value])
+
+                #entity type
+                retJob.add_args(ArgsKeysEnums.FIWARE_ENTITY_TYPE.value,request_dict[ApiRequestFieldsEnum.ENTITY_TYPE.value])
+                #data to collect
+                aux_datas_to_retrieve = []
+                for data in request_dict[ApiRequestFieldsEnum.DATA_COLLUMNS.value]:
+                    aux_datas_to_retrieve.append(data)
+
+                retJob.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,aux_datas_to_retrieve)
+
+                #aggregration mode
+                retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+                retJob.add_args(ArgsKeysEnums.CORRELATION_TARGET_COLLUMNS.value,aux_datas_to_retrieve)
+
+                retJob.add_args(ArgsKeysEnums.LINEAR_REG_ANALYSE_COLLUMNS.value,aux_datas_to_retrieve[:-1])
+                retJob.add_args(ArgsKeysEnums.LINEAR_REG_TARGET_COLLUMNS.value,aux_datas_to_retrieve[len(aux_datas_to_retrieve)-1])
+
+                #include actions
+                sth_action = ActionModel()
+                sth_action.set_target(TargetEnum.TARGET_STH_COMET)
+                sth_action.set_action(ActionEnum.GET_STH_COMET_DATA)
+
+                action_lin_reg = ActionModel()
+                action_lin_reg.set_target(TargetEnum.TARGET_LINEAR_REG_MODULE)
+                action_lin_reg.set_action(ActionEnum.EXECUTE_LINEAR_REGRESSION)
+
+                retJob.add_action(sth_action)
+                retJob.add_action(action_lin_reg)
+
+
+
             elif(action == ApiActionsEnum.TWO_DIMENSIONAL_GRAPHIC):
                 pass
-            
+
             else:
                 return None
         
@@ -119,4 +151,4 @@ class ApiRequestUtils():
 
         except Exception as e:
             print("Exception: {e}")
-            return None
+            return e
