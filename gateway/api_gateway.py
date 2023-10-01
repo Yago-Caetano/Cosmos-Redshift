@@ -25,6 +25,8 @@ class ApiGateway():
         self.__app.add_url_rule('/api/requestAnalysis', 'request_async_analysis', self.request_async_analysis, methods=['POST'])
         self.__pending_job_id = None
         self.__wainting_for_job_conclusion = False
+        self.__timeout_ms = 100
+        self.__sync_counter = 0
 
         self.__resp_job = None
 
@@ -153,10 +155,16 @@ class ApiGateway():
         self.__post_msg(job)
 
 
-        while(self.__wainting_for_job_conclusion == True):
+        while((self.__wainting_for_job_conclusion == True) and (self.__sync_counter < self.__timeout_ms)):
             time.sleep(0.01)
-        #return JobUtils().convert_job_to_json(self.__resp_job)
-        return ApiRequestUtils().convert_to_sucess_msg(self.__resp_job)
+            self.__sync_counter+=1
+
+        if(self.__sync_counter >= self.__timeout_ms):
+            self.__sync_counter = 0
+            return "Não foi possível satisfazer sua requisição",408
+        else:
+            self.__sync_counter = 0
+            return ApiRequestUtils().convert_to_sucess_msg(self.__resp_job)
     
     def request_async_analysis(self):
         job = ApiRequestUtils().convert_request_to_job(request.json,True)
