@@ -13,6 +13,7 @@ AI component to FIWARE environment
 - [Requesting Asynchronous analysis](#requesting-asynchronous-analysis)
 [Project Architecture](#project-architecture)
 [Tutorials](#tutorials)
+-   []()
 [Environment variables](#environment-variables)
 *******
 
@@ -62,9 +63,9 @@ To peform this kind of request, you need to execute a POST request to **/api/req
 
 ### 1 - Setting fiware instance to be attached
 
-As mentioned on the project description, this is fiware component, therefore, it's necessary to set up the fiware instnace location,
+As mentioned on the project description, this is fiware component, therefore, it's necessary to set up the fiware instance location (STH Comet and Orion Context Broker) also the fiware service and the service path.
 
-You can check [Environment Variables](#environment-variables) section to 
+All of the params are available as [Environment Variables](#environment-variables), it's only necessary to set up the [Docker Compose File](./docker-compose.yml).
 
 ### 2 - Discover available entities and its attributes to perform analysis
 
