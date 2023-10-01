@@ -65,7 +65,40 @@ To peform this kind of request, you need to execute a POST request to **/api/req
 
 As mentioned on the project description, this is fiware component, therefore, it's necessary to set up the fiware instance location (STH Comet and Orion Context Broker) also the fiware service and the service path.
 
-All of the params are available as [Environment Variables](#environment-variables), it's only necessary to set up the [Docker Compose File](./docker-compose.yml).
+All of the params are available as [Environment Variables](#environment-variables), it's only necessary to set up the [Docker Compose File](./docker-compose.yml). The block bellow shows a example how docker compose file should be setted, considering that there is a fiware instance running on "*172.26.64.1*", having "*smart*" as service name and "*/*" as service path.
+
+```
+   version: '3'
+    services:
+
+    rabbitmq:
+        image: "rabbitmq:3-management"
+        #hostname: rabbitmq
+        ports:
+        - "5672:5672"  
+        - "15672:15672"
+    
+    app:
+        build:
+        context: .  
+        ports:
+        - "5000:5000" 
+        depends_on:
+        - rabbitmq
+        environment:
+        - INTERNAL_RABBIT_MQ_HOST=rabbitmq
+        - INTERNAL_RABBIT_MQ_PORT=5672
+        - STH_COMET_HOST=172.26.64.1
+        - STH_COMET_PORT=8666
+        - ORION_CONTEXT_BROKER_HOST=172.26.64.1
+        - ORION_CONTEXT_BROKER_PORT=1026
+        - FIWARE_SERVICE=smart
+        - FIWARE_SERVICE_PATH=/
+ 
+
+```
+
+With docker-compose.yml setted, [Execute Docker Container](#running-on-docker-compose)
 
 ### 2 - Discover available entities and its attributes to perform analysis
 
@@ -97,7 +130,15 @@ Attribute **img** is the result of analisys formatted as png image and enconded 
 ![Converted Image](./docs/result-correlation-img.png)
 ### 5 - Peform a Linear Regression - Blocking
 
+Continuing with the same fiware instance, let's request a linear analysis with attributes  "humidity" ,"temperature" and "cracked_eggs" as **Target**. Again, create a POST request, but now change the payload as demonstrate bellow.
 
+![Linear Regression Request](./docs/request-lin-reg.png)
+
+The component should return a message like that.
+
+![Result Linear Regression](./docs/result-lin-reg.png)
+
+In this case, The parameters of linear regression is returned (coefficients and intercept), also a graph indicating the model prevision versus the real value mensured
 
 ### Environment variables
 

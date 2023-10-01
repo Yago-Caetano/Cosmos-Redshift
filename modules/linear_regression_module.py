@@ -79,4 +79,4 @@ class LinearRegressionModule(BaseModule):
 
         plt.clf()
 
-        return {"params": parameters, "figure": base64_image}
+        return {ArgsKeysEnums.RESULT_LINEAR_REGRESSION_PARAMS.value: parameters, ArgsKeysEnums.RESULT_LINEAR_REGRESSION_FIGURE.value: base64_image}

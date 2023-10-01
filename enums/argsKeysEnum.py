@@ -16,5 +16,9 @@ class ArgsKeysEnums(Enum):
 
     RESULT_CORRELATION = "result_correlation"
     RESULT_2D_GRAPH = "result_2d_graph"
+
     RESULT_LINEAR_REGRESSION = "result_linear_reg"
+    RESULT_LINEAR_REGRESSION_FIGURE = "figure"
+    RESULT_LINEAR_REGRESSION_PARAMS = "params"
+
     EXTERNAL_QUEUE = "external_queue"

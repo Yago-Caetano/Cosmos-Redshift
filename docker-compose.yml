@@ -5,14 +5,14 @@ services:
     image: "rabbitmq:3-management"
     #hostname: rabbitmq
     ports:
-      - "5672:5672"  # Porta padrão para conexões RabbitMQ
-      - "15672:15672"  # Porta da interface de gerenciamento do RabbitMQ (opcional)
+      - "5672:5672"  
+      - "15672:15672"  
    
   app:
     build:
-      context: .  # Substitua pelo caminho para o diretório da sua aplicação Python
+      context: .  
     ports:
-      - "5000:5000"  # Substitua pela porta da sua aplicação Python
+      - "5000:5000"  
     depends_on:
       - rabbitmq
     environment:
