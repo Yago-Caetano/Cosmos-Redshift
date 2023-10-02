@@ -78,8 +78,12 @@ class ApiRequestUtils():
 
                 retJob.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,aux_datas_to_retrieve)
 
-                #aggregration mode
-                retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+                if ApiRequestFieldsEnum.STH_AGGREGATION.value in request_dict:
+                    #aggregration mode
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value])
+                else:
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=100")
+
 
                 retJob.add_args(ArgsKeysEnums.CORRELATION_TARGET_COLLUMNS.value,aux_datas_to_retrieve)
 
@@ -108,8 +112,12 @@ class ApiRequestUtils():
 
                 retJob.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,aux_datas_to_retrieve)
 
-                #aggregration mode
-                retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+                if ApiRequestFieldsEnum.STH_AGGREGATION.value in request_dict:
+                    #aggregration mode
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value])
+                else:
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=100")
+
                 retJob.add_args(ArgsKeysEnums.CORRELATION_TARGET_COLLUMNS.value,aux_datas_to_retrieve)
 
                 retJob.add_args(ArgsKeysEnums.LINEAR_REG_ANALYSE_COLLUMNS.value,aux_datas_to_retrieve[:-1])
@@ -143,8 +151,11 @@ class ApiRequestUtils():
 
                 retJob.add_args(ArgsKeysEnums.FIWARE_ATTRS.value,aux_datas_to_retrieve)
 
-                #aggregration mode
-                retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=10")
+                if ApiRequestFieldsEnum.STH_AGGREGATION.value in request_dict:
+                    #aggregration mode
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value])
+                else:
+                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=100")
 
                 #2d graphic collumns
                 retJob.add_args(ArgsKeysEnums.TWO_DIM_GRAPHIC_TARGET_COLLUMNS.value,aux_datas_to_retrieve)

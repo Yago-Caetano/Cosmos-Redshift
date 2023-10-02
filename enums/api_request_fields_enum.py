@@ -7,5 +7,6 @@ class ApiRequestFieldsEnum(Enum):
     ENTITY = "entity"
     ENTITY_TYPE = "entity_type"
     DATA_COLLUMNS = "fields"
+    STH_AGGREGATION = "sth_agg"
     
     
