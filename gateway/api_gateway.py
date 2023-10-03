@@ -15,11 +15,14 @@ from utils.api_utils import ApiRequestUtils
 
 from utils import api_utils
 import uuid
+from flask import Flask, request
+from flask_cors import CORS
 
 class ApiGateway():
 
     def __init__(self) -> None:
         self.__app = Flask(__name__)
+        CORS(self.__app)
         self.__app.add_url_rule('/api/availableEntities', 'collect_available_entities', self.collect_available_entities, methods=['GET'])
         self.__app.add_url_rule('/api/sync/requestAnalysis', 'request_sync_analysis', self.request_sync_analysis, methods=['POST'])
         self.__app.add_url_rule('/api/requestAnalysis', 'request_async_analysis', self.request_async_analysis, methods=['POST'])
