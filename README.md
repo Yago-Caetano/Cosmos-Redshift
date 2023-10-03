@@ -44,7 +44,7 @@ To peform a syncronized analisys, you need to execute a POST request to **/api/s
 * **Entity:** Entity ID to perform analysis;
 * **Entity Type:** ID to entity type;
 * **Fields:** Entity's selected fields to perform analysis **(In LINEAR_REGRESSION_ANALYSIS, the last field will consider as target of prediction)**;
-* **Agg_method** Aggregation method to query data, if nothing were provided, the default value is LastN=100 **(lastN,dateFrom,dateTo)**;
+* **Agg_method** Object of aggregation method to query data, if nothing were provided, the default value is LastN=100 **(lastN,dateFrom,dateTo)**;
 * **Agg_method_value** Aggregation method value;
 
 ### Requesting Asynchronous analysis
