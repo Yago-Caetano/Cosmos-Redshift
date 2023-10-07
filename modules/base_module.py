@@ -33,10 +33,15 @@ class BaseModule(ABC):
         if(job != None):
             #append into local queue
             self.__jobs.put(job)
+        else:
+            print("Falha ao fazer a conversao do JSON para trabalho")
 
     def __consume_rabbit_mq(self):
-        # Inicie o loop para escutar a fila indefinidamente
-        self.__queue_channel.start_consuming()
+        try:
+            # Inicie o loop para escutar a fila indefinidamente
+            self.__queue_channel.start_consuming()
+        except Exception as e:
+            print(f'Exception!!: {e}')
 
     def finalize_job_as_succed(self,job):
         job.get_next_pending_action().set_state(StateEnum.DONE)
@@ -54,13 +59,14 @@ class BaseModule(ABC):
         fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
 
         mensagem = JobUtils().convert_job_to_json(job)
-        #print(mensagem)
+        print("Success job parsing:")
+        print(f'mensagem')
         if(mensagem != None):
             #print(mensagem)
             # Publica a mensagem na fila
             canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
 
-            #print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
 
         # Fecha a conexão
         conexao.close()
@@ -86,7 +92,9 @@ class BaseModule(ABC):
         self.__connection = pika.BlockingConnection(pika.ConnectionParameters(self.__hostname))
 
         self.__queue_channel = self.__connection.channel()
-        self.__queue_channel.queue_declare(queue=self._external_queue,exclusive=True)
+        #self.__queue_channel.queue_declare(queue=self._external_queue,exclusive=True)
+        self.__queue_channel.queue_declare(queue=self._external_queue)
+
 
         # Create callback
         self.__queue_channel.basic_consume(queue=self._external_queue, on_message_callback=self.__callback, auto_ack=True)
