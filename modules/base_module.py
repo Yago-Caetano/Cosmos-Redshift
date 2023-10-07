@@ -59,8 +59,8 @@ class BaseModule(ABC):
         fila = QueuesEnum.MAIN_QUEUE.value # Substitua pelo nome da sua fila
 
         mensagem = JobUtils().convert_job_to_json(job)
-        print("Success job parsing:")
-        print(f'mensagem')
+        #print("Success job parsing:")
+        #print(f'mensagem')
         if(mensagem != None):
             #print(mensagem)
             # Publica a mensagem na fila
