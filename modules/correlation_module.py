@@ -46,9 +46,13 @@ class CorrelationModule(BaseModule):
         normalized_data = (df - df.mean()) / df.std()
 
         correlations = normalized_data.corr()
+        if(len(columns_to_analyze) < 10):
+            plt.figure(figsize=(10, 8))
+        else:
+            height = len(columns_to_analyze)
+            # Create heat map
+            plt.figure(figsize=(height, int(height/1.25)))
 
-        # Create heat map
-        plt.figure(figsize=(10, 8))
         sns.heatmap(correlations, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
         plt.title("Mapa de Calor das Correlações entre Colunas")
         plt.savefig('grafico.png', format='png')

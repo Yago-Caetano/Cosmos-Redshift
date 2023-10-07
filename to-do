@@ -1,4 +1,4 @@
 Bloquear acesso ás filas internas
 Melhorar parte das variaveis de ambiente
-timeout para sync request
 Incluir leitura
+validar campos para correlation queue
