@@ -1,0 +1,101 @@
+{
+    "id": "urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1",
+    "type": "eggProduction",
+    "date":{
+        "type": "DateTime",
+        "value": "2017-01-01T01:20:00Z"
+    },
+      "age": {
+      "type": "float",
+      "value": 0
+    },
+    "openingStockFemale": {
+        "type": "float",
+        "value": 0
+      },
+      "openingStockMale":{
+        "type": "float",
+        "value": 0
+      },
+      "mortalityFemale":{
+        "type": "float",
+        "value": 0
+      },
+      "mortalityMale":{
+        "type": "float",
+        "value": 0
+      },
+      "cullStockFemale":{
+        "type": "float",
+        "value": 0
+      },
+      "cullStockMale":{
+        "type": "float",
+        "value": 0
+      },
+    "total":{
+      "type": "float",
+      "value": 0
+    },
+    "cullStockPercentage":{
+      "type": "float",
+      "value": 0
+    },
+    "hatchingEggs":{
+      "type": "float",
+      "value": 0
+    },
+     "hatchingEggsPercentage":{
+      "type": "float",
+      "value": 0
+     },
+     "smallEggs":{
+      "type": "float",
+      "value": 0
+     },
+     "doubleYolk":{
+      "type": "float",
+      "value": 0
+     },
+     "cracked":{
+      "type": "float",
+      "value": 0
+     },
+     "leathered":{
+      "type": "float",
+      "value": 0
+     },
+     "waste":{
+      "type": "float",
+      "value": 0
+     },
+     "eggWeigth":{
+      "type": "float",
+      "value": 0
+     },
+     "feedFemaleGrams":{
+      "type": "float",
+      "value": 0
+     },
+     "feedMaleGrams":{
+      "type": "float",
+      "value": 0
+     },
+     "cumulativeTotalEggs":{
+      "type": "float",
+      "value": 0
+     },
+     "cumulativeHatchingEggs":{
+      "type": "float",
+      "value": 0
+     },
+     "temperature":{
+      "type": "float",
+      "value": 0
+     },
+     "humidity":{
+      "type": "float",
+      "value": 0
+     }
+  }
+  
