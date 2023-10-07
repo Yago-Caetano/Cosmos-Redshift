@@ -5,6 +5,7 @@ from enums.api_actions_enum import ApiActionsEnum
 from enums.argsKeysEnum import ArgsKeysEnums
 from enums.action_enum import ActionEnum
 from enums.target_enum import TargetEnum
+from enums.sth_args_methods_enum import STHArgsEnum
 from singleton.env_values_singleton import EnvValuesSingleton
 from models.action_model import ActionModel
 from models.job_model import JobModel
@@ -21,23 +22,23 @@ class ApiRequestUtils():
                 return status
         return None
     
-    def __check_string_is_key_from_dict(self,dict,string):
-        ret = False
-        keys = dict.keys()
-        for key in keys:
-            if(string in key):
-                ret = True
-                break
-        return ret
 
     def parse_sth_aggregation_options(self,sth_agg_args, job:JobModel):
         #recuperar a listagem e montar a query de acordo com 
+        sth_params_count = 0
 
-        #for aggr_met in sth_agg_args:
-            
+        keys = sth_agg_args.keys()
+        for key in keys:
+            if not self.__check_string_belongs_to_enum(key,STHArgsEnum):
+                return False
 
-        pass
+            else:
+                if(sth_params_count > 0):
+                    job.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,f'&{key}={sth_agg_args[key]}')
+                else:
+                    job.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,f'{key}={sth_agg_args[key]}')
 
+        return True
 
     def convert_to_sucess_msg(self,job:JobModel):
         ret_dict = {"response":"SUCESS"}
@@ -98,8 +99,10 @@ class ApiRequestUtils():
 
                 if ApiRequestFieldsEnum.STH_AGGREGATION.value in request_dict:
                     #aggregration mode
+                    if(self.parse_sth_aggregation_options(request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value],retJob) == False):
+                        print("Error ao fazer parser do STH Agg")
 
-                    retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value])
+                    #retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,request_dict[ApiRequestFieldsEnum.STH_AGGREGATION.value])
                 else:
                     retJob.add_args(ArgsKeysEnums.STH_AGGR_METHOD.value,"lastN=100")
 

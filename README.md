@@ -11,9 +11,16 @@ AI component to FIWARE environment
 - [Requesting sync analysis](#requesting-sync-analysis)
     - [Payload description](#payload-description)
 - [Requesting Asynchronous analysis](#requesting-asynchronous-analysis)
-[Project Architecture](#project-architecture)
+[Architectures](#architectures)
+- [Component Architetuctre](#component-architetuctre)
+- [Connection With Fiware Project](#connection-with-fiware-project)
 [Tutorials](#tutorials)
--   []()
+-   [1 - Setting fiware instance to be attached](#1---setting-fiware-instance-to-be-attached)
+- [2 - Discover available entities and its attributes to perform analysis](#2---discover-available-entities-and-its-attributes-to-perform-analysis)
+- [3 - Request a 2D graph - Blocking](#3---request-a-2d-graph---blocking)
+- [4 - Peform a Correlation analysis - Blocking](#4---peform-a-correlation-analysis---blocking)
+- [5 - Peform a Linear Regression - Blocking](#5---peform-a-linear-regression---blocking)
+
 [Environment variables](#environment-variables)
 *******
 
@@ -45,7 +52,6 @@ To peform a syncronized analisys, you need to execute a POST request to **/api/s
 * **Entity Type:** ID to entity type;
 * **Fields:** Entity's selected fields to perform analysis **(In LINEAR_REGRESSION_ANALYSIS, the last field will consider as target of prediction)**;
 * **Agg_method** Object of aggregation method to query data, if nothing were provided, the default value is LastN=100 **(lastN,dateFrom,dateTo)**;
-* **Agg_method_value** Aggregation method value;
 
 ### Requesting Asynchronous analysis
 
