@@ -22,6 +22,7 @@ class CorrelationModule(BaseModule):
                 local_job = self.get_job_from_inner_queue()
 
                 if(local_job != None):
+                    print(f'Correlation_module job taken: {local_job.get_next_pending_action().get_action()}')
                     if(local_job.get_next_pending_action().get_action() == ActionEnum.EXECUTE_CORRELATION_ANALYSIS):
                         print(f'CORRELATION_MODULE: {local_job}')
                         #convert incoming data to dataframe
@@ -31,8 +32,8 @@ class CorrelationModule(BaseModule):
 
                         #set this action as Complete
                         self.finalize_job_as_succed(local_job)   
-            except:
-                pass        
+            except Exception as e:
+                print(f'{e}')        
 
 
     def analyze_and_visualize_correlations(self,dataframe, columns_to_analyze):
