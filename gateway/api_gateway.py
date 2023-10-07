@@ -28,7 +28,7 @@ class ApiGateway():
         self.__app.add_url_rule('/api/requestAnalysis', 'request_async_analysis', self.request_async_analysis, methods=['POST'])
         self.__pending_job_id = None
         self.__wainting_for_job_conclusion = False
-        self.__timeout_ms = 100
+        self.__timeout_ms = 10000
         self.__sync_counter = 0
 
         self.__resp_job = None
