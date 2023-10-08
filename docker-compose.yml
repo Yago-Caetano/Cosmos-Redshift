@@ -3,11 +3,16 @@ services:
 
   rabbitmq:
     image: "rabbitmq:3-management"
-    #hostname: rabbitmq
+    hostname: rabbitmq
+    command: bash -c "rabbitmq-plugins enable --offline rabbitmq_web_stomp && rabbitmq-server"
     ports:
       - "5672:5672"  
       - "15672:15672"  
-   
+      - "15674:15674"
+
+    volumes:
+      - ./dados:/var/lib/rabbitmq
+      
   app:
     build:
       context: .  

@@ -5,7 +5,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
 # Nome da fila que você deseja consumir
-queue_name = '4971bc52-d144-4411-b89d-d02f02d81c0c'
+queue_name = 'e5abf0d0-44f8-4f1b-841d-83042eafedeb'
 
 # Declaração da fila (caso ainda não exista)
 channel.queue_declare(queue=queue_name)
