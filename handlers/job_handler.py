@@ -27,7 +27,7 @@ def consume_rabbit_mq():
 
 
 def read_cb(ch, method, properties, body):
-    print(f"{__name__} Recebido: {body.decode('utf-8')}")
+    #print(f"{__name__} Recebido: {body.decode('utf-8')}")
 
     #try to convert data to job format
     job = JobUtils().convert_json_to_job(body.decode('utf-8'))
@@ -119,7 +119,7 @@ def read_cb(ch, method, properties, body):
         mensagem = JobUtils().convert_job_to_json(job)
 
         if(mensagem != None):
-            print(mensagem)
+            #print(mensagem)
             # Publica a mensagem na fila
             canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
 
