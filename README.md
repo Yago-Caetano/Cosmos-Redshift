@@ -1,6 +1,6 @@
-# TCC_AI_FIWARE
+# Cosmos-Redshift
 
-AI component to FIWARE environment
+ML and data analytics Generic Enabler for FIWARE
 
 *******
 # Table of contents
