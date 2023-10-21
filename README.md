@@ -1,3 +1,4 @@
+![logo](./docs/logo.png)
 # Cosmos-Redshift
 
 ML and Data Analytics Generic Enabler for FIWARE
