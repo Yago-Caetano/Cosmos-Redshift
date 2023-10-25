@@ -90,7 +90,7 @@ class ApiGateway():
         canal = conexao.channel()
 
         fila = queue_id # Substitua pelo nome da sua fila
-        canal.queue_declare(queue=fila)
+        canal.queue_declare(queue=fila,auto_delete=True)
 
         mensagem = ApiRequestUtils().convert_to_sucess_msg(job)
         #JobUtils().convert_job_to_json(job)
