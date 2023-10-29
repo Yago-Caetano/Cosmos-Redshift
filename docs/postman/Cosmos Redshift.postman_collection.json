@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "232209ee-1e61-4189-bba9-8ca5d0730a02",
+		"name": "Cosmos Redshift",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9580759",
+		"_collection_link": "https://andromedacode.postman.co/workspace/Team-Workspace~566e8617-cf91-4cfa-8b00-478b8a9f36da/collection/9580759-232209ee-1e61-4189-bba9-8ca5d0730a02?action=share&source=collection_link&creator=9580759"
+	},
+	"item": [
+		{
+			"name": "Check available entities",
+			"item": [
+				{
+					"name": "Retrieve available entities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{container-ip}}/api/availableEntities"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sync requests",
+			"item": [
+				{
+					"name": "Correlation Analysis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"CORRELATION_ANALYSIS\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/sync/requestAnalysis"
+					},
+					"response": []
+				},
+				{
+					"name": "Linear Regression",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"LINEAR_REGRESSION_ANALYSIS\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/sync/requestAnalysis"
+					},
+					"response": []
+				},
+				{
+					"name": "2D Graphic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"2D_GRAPHIC\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/sync/requestAnalysis"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Async Requests",
+			"item": [
+				{
+					"name": "Linear Regression",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"LINEAR_REGRESSION_ANALYSIS\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/requestAnalysis"
+					},
+					"response": []
+				},
+				{
+					"name": "Correlation Analysis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"CORRELATION_ANALYSIS\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/requestAnalysis"
+					},
+					"response": []
+				},
+				{
+					"name": "2D Graphic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"action\": \"2D_GRAPHIC\",\r\n    \"entity\": \"urn:ngsi-ld:entity:a7f63730-43c7-4a6b-93c1-8b8903e76dc1\",\r\n    \"entity_type\":\"eggProduction\",\r\n    \"fields\": [\"temperature\",\"humidity\",\"cracked\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{container-ip}}/api/requestAnalysis"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{container-ip}",
+			"value": "172.26.64.1:5000",
+			"type": "string"
+		},
+		{
+			"key": "container-ip",
+			"value": "172.26.64.1",
+			"disabled": true
+		}
+	]
+}

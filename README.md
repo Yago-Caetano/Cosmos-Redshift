@@ -36,7 +36,7 @@ To execute this project you need to have a FIWARE cluster with Orion Context Bro
 
 ## API
 
-Users can interact with this component through REST API, you can check all the samples shown here by clicking in this [collection]()
+Users can interact with this component through REST API, you can check all the samples shown here by clicking in this [collection](./docs/postman/Cosmos%20Redshift.postman_collection.json)
 
 ### Requesting Sync Analysis
 
