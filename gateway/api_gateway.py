@@ -43,9 +43,18 @@ class ApiGateway():
 
         if(job == None):
             return
-        
-        pending_action = job.get_next_pending_action()
-        
+        try:
+            pending_action = job.get_next_pending_action()
+        except:
+            #exception means that job has failed
+            if(ActionEnum.SEND_RESPONSE_TO_API_GATEWAY in job.get_actions()):
+                self.__resp_job = None
+                self.__wainting_for_job_conclusion = False
+                return
+            elif(ActionEnum.SEND_ASYNC_RESPONSE_TO_API_GATEWAY in job.get_actions()):
+                self.__post_msg_ext(job.get_args()[ArgsKeysEnums.EXTERNAL_QUEUE.value],{"status": "failed"})
+
+
         if(pending_action.get_action() == ActionEnum.SEND_RESPONSE_TO_API_GATEWAY):
             if((self.__wainting_for_job_conclusion == True) and (self.__pending_job_id == job.get_id())):
                 self.__resp_job = job
@@ -167,6 +176,9 @@ class ApiGateway():
             return "Não foi possível satisfazer sua requisição",408
         else:
             self.__sync_counter = 0
+            if(self.__resp_job == None):
+                return "Falha ao requisitar a análise",400
+            
             return ApiRequestUtils().convert_to_sucess_msg(self.__resp_job)
     
     def request_async_analysis(self):
@@ -204,9 +216,10 @@ class ApiGateway():
                 print(f"Erro na solicitação GET. Código de status: {response.status_code}")
                 return None
             
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             print(f"Erro na solicitação GET: {str(e)}")
-            return None
+            return "Não foi possível se conectar ao Orion Context Broker",400
+
 
 
     def parse_api_request(self):

@@ -1,0 +1,3 @@
+class JobFailedException(Exception):
+    pass
+

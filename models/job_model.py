@@ -17,6 +17,8 @@ class JobModel():
 
     def get_next_pending_action(self):
         for action in self.__actions:
+            if(action.get_state() == StateEnum.FAILED):
+                raise 
             if(action.get_state() != StateEnum.DONE):
                 return action
         

@@ -6,3 +6,4 @@ class StateEnum(IntEnum):
     EXECUTING = 2
     WAITING_RESPONSE=3
     DONE = 4
+    FAILED = 5

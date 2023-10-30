@@ -49,6 +49,12 @@ class BaseModule(ABC):
         #dispatch job to main queue
         self.__post_job_to_main_queue(job)
 
+    def finalize_job_as_failed(self,job):
+        job.get_next_pending_action().set_state(StateEnum.FAILED)
+
+        #dispatch job to main queue
+        self.__post_job_to_main_queue(job)
+
     def __post_job_to_main_queue(self,job):
         
         # Configurações de conexão com o RabbitMQ

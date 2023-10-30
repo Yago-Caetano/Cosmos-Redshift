@@ -33,6 +33,7 @@ class CorrelationModule(BaseModule):
                         #set this action as Complete
                         self.finalize_job_as_succed(local_job)   
             except Exception as e:
+                self.finalize_job_as_failed(local_job)
                 print(f'{e}')        
 
 

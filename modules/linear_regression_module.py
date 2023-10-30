@@ -37,6 +37,7 @@ class LinearRegressionModule(BaseModule):
                         self.finalize_job_as_succed(local_job)   
             except Exception as e:
                 print(e)
+                self.finalize_job_as_failed(local_job)
                 pass
 
 

@@ -32,6 +32,7 @@ class BidimensionalGraphModule(BaseModule):
                         #set this action as Complete
                         self.finalize_job_as_succed(local_job)   
             except:
+                self.finalize_job_as_failed(local_job)
                 pass        
 
 

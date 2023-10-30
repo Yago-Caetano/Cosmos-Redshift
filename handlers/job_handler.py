@@ -35,13 +35,36 @@ def read_cb(ch, method, properties, body):
     if(job == None):
         print("Failed to parse JOB")
 
-    pending_action = job.get_next_pending_action()
+    try:
+        pending_action = job.get_next_pending_action()
 
-    if(pending_action == None):
-        print(f'O trabalho {job.get_id()} foi ENCERRADO!!')
+        if(pending_action == None):
+            print(f'O trabalho {job.get_id()} foi ENCERRADO!!')
 
-        print("Raw data")
-        print(body)
+            print("Raw data")
+            print(body)
+            return
+    except:
+        #in this case, its necessary to indicate job failed
+
+        # Configurações de conexão com o RabbitMQ
+        conexao = pika.BlockingConnection(pika.ConnectionParameters(EnvValuesSingleton().get_internal_queue_host()))  # Altere para o endereço do seu servidor RabbitMQ, se necessário
+        canal = conexao.channel()
+
+        # Declaração da fila onde você deseja publicar mensagens
+        fila = QueuesEnum.API_GATEWAY_RESPONSE_QUEUE.value
+
+        mensagem = JobUtils().convert_job_to_json(job)
+
+        if(mensagem != None):
+            #print(mensagem)
+            # Publica a mensagem na fila
+            canal.basic_publish(exchange='', routing_key=fila, body=mensagem)
+
+            print(f"Mensagem enviada para a fila {fila}: {mensagem}")
+
+        # Fecha a conexão
+        conexao.close()
         return
     
     #check next available job and dispatch it

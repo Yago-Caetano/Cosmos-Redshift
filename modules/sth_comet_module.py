@@ -96,4 +96,5 @@ class SthCometModule(BaseModule):
 
             except Exception as e:
                 print(e)
+                self.finalize_job_as_failed(local_job)
                 pass
