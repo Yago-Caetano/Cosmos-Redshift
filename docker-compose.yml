@@ -12,7 +12,7 @@ services:
 
     volumes:
       - ./dados:/var/lib/rabbitmq
-      
+    
   app:
     build:
       context: .  
@@ -30,3 +30,9 @@ services:
       - FIWARE_SERVICE=smart
       - FIWARE_SERVICE_PATH=/
 
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
