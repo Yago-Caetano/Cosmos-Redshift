@@ -6,6 +6,7 @@ ML and Data Analytics Generic Enabler for FIWARE
 *******
 | Table of Contents |
 | :--- |
+| [Initializing submodules](#initializing-submodules) |
 | [Requirements](#requirements) |
 | [Running on Docker Compose](#running-on-docker-compose) |
 | [API](#api) |
@@ -23,6 +24,17 @@ ML and Data Analytics Generic Enabler for FIWARE
 | [5 - Perform a Linear Regression - Blocking](#5---perform-a-linear-regression---blocking) |
 | [Environment variables](#environment-variables) |
 *******
+
+## Initializing submodules
+
+This project has another projects as submodules, to use this project you need to initialize all submodules. Write these commands bellow.
+
+```
+git submodule init
+git submodule update
+
+```
+
 
 ## Requirements
 
