@@ -40,32 +40,33 @@ class CorrelationModule(BaseModule):
     def analyze_and_visualize_correlations(self,dataframe, columns_to_analyze):
         
         matplotlib.use('Agg')
-
+    
         df = pd.DataFrame(dataframe, columns=columns_to_analyze)
-
+    
         # normalize data
         normalized_data = (df - df.mean()) / df.std()
-
+    
         correlations = normalized_data.corr()
         if(len(columns_to_analyze) < 5):
-            plt.figure(figsize=(5, 5))
+            plt.figure(figsize=(12.75, 7.75)) 
         else:
             height = len(columns_to_analyze)
             # Create heat map
-            plt.figure(figsize=(height, int(height/1.25)))
+            plt.figure(figsize=((height * 2.25) + 1, int(height/1.25) * 1.75 * 1.75))
 
+        sns.set(font_scale=1.2)
         sns.heatmap(correlations, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
-        plt.title("Mapa de Calor das Correlações entre Colunas")
+        plt.title("Mapa de Calor das Correlações entre Colunas", fontsize=18)
         plt.savefig('grafico.png', format='png')
-
+    
         #plt.show()
         with open('grafico.png', 'rb') as png_file:
             png_contents = png_file.read()
-
+    
         # Codificar em base64
         base64_image = base64.b64encode(png_contents).decode('utf-8')
-
+    
         plt.clf()
-
+    
         return base64_image
-        #plt.savefig('output.eps', format='eps', bbox_inches='tight')
+    
