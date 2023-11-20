@@ -23,6 +23,7 @@ ML and Data Analytics Generic Enabler for FIWARE
 | [4 - Perform a Correlation Analysis - Blocking](#4---perform-a-correlation-analysis---blocking) |
 | [5 - Perform a Linear Regression - Blocking](#5---perform-a-linear-regression---blocking) |
 | [Environment variables](#environment-variables) |
+| [Team](#team) |
 *******
 
 ## Initializing submodules
@@ -183,3 +184,24 @@ In this case, the parameters of linear regression are returned (coefficients and
     FIWARE_SERVICE_PATH=/
 
 ```
+
+### Team
+
+This repository is part off the final project on Computer Engineering at [Faculdade Engenheiro Salvador Arena](http://www.faculdadesalvadorarena.org.br/) 2 sem /2023.
+
+Our team is composed by:
+
+| Member | GitHub profile |
+| ------ | -------------- |
+|Carlos Alexandre Silva Ferreira | https://github.com/calexs |
+|Felipe Kevin De Lima | https://github.com/FelipeKevin20 |
+| Guilherme Aparecido Tavares Da Silva | https://github.com/guiTavares13 |
+| Roger Kenichi Nomi | https://github.com/RogerKenichi |
+| Yago José Barros Caetano | https://github.com/Yago-Caetano |
+
+
+#### Advisor
+
+| Name | GitHub profile |
+| ------ | -------------- |
+|Dr. Fábio Henrique Cabrini | https://github.com/fabiocabrini |
