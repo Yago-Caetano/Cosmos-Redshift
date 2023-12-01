@@ -38,6 +38,7 @@ with open('sample_dataset.csv', 'r') as csv_file:
 
         except:
             pass
+        
         # Handle the API response (e.g., print response status code)
         #print(f"Row {row['id']} - Status Code: {response.status_code}")
 
